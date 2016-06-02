@@ -38,7 +38,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/phone"
                 android:layout_weight="1"
-                android:hint="Phone" />
+                android:hint="Phone"
+                android:phoneNumber="false"
+                android:inputType="phone" />
 
             <Button
                 android:layout_width="48dp"

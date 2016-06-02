@@ -1,5 +1,6 @@
 package theironyard.com.contactsandroid;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
 
     ArrayAdapter<String> items;
+    String nameToPass;
 
     ListView list;
     Button add;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         add.setOnClickListener(this);
         list.setOnItemLongClickListener(this);
-
+        list.setOnItemClickListener(this);
     }
 
     @Override
@@ -41,15 +43,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String nameToAdd = name.getText().toString();
         String phoneToAdd = phone.getText().toString();
         String contact = nameToAdd + " (" + phoneToAdd + ")";
-        items.add(contact);
-        name.setText("");
-        phone.setText("");
+        if (!nameToAdd.isEmpty() && !phoneToAdd.isEmpty()) {
+            items.add(contact);
+            name.setText("");
+            phone.setText("");
+        }
     }
+
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         String item = items.getItem(position);
         items.remove(item);
         return true;
+    }
+
+
+    // see this link for example on using Intent: http://101apps.co.za/articles/passing-data-between-activities.html
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intentExtras = new Intent(MainActivity.this, Contacts.class);
+        intentExtras.putExtra("nameToPass", items.getItem(position));
+        startActivity(intentExtras);
     }
 }
